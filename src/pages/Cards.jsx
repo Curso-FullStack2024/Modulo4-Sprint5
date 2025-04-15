@@ -4,17 +4,19 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Card from '../components/Card'
 import { useCards } from '../contexts/CardsContext';
 import { toast } from 'react-toastify';
+import CardPagination from '../components/CardPagination';
 
 const Cards = () => {
-  const{cards , setCards}=useCards()
+  const{currentCards , setCards}=useCards()
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false);
 
 
     const fetchCards = useCallback(async () => {
+        console.log('pasa por fectch')
         setLoading(true)
         try {//obtiene los primeros 18 elementos de la api
-            const response = await axios.get('https://clashroyaleapi-412e2ce9772c.herokuapp.com/cards?_page=1&_limit=18')
+            const response = await axios.get('https://clashroyaleapi-412e2ce9772c.herokuapp.com/cards')
             setCards(response.data)
 
         } catch (err) {
@@ -52,14 +54,14 @@ const Cards = () => {
                     <div className="flex flex-wrap justify-center gap-3 p-3 min-h-screen">
 
                         {
-                            cards && cards.map((item) => (
+                            currentCards && currentCards.map((item) => (
 
                                 <Card key={item.id} id={item.id} name={item.name} elixirCost={item.elixirCost} image={item.iconUrls?.medium} />
 
                             ))
                         }
+                    <CardPagination  />
                     </div>
-                   
                 </div>
             </div>
         </>
